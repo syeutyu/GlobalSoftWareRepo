@@ -20,8 +20,29 @@ router.route('/auth/search').get((req, res) => {
     let cate = req.query.category;
 
     logic.map(lati, longi).then((data) => {
-        res.send(JSON.parse(data));
-    })
+        let arr = new Array();
+        for (let i = 0; i < data.length; i++) {
+            let object = {};
+            object.id = data[i].id
+            object.lati = data[i].frontLat;
+            object.longi = data[i].frontLon;
+            object.name = data[i].name;
+            object.tel = data[i].telNo;
+            arr.push(object);
+        }
+        return arr;
+
+    }).then((arr) => {
+        console.log('실행');
+        logic.getCategory(arr, (data) => {
+            console.log(data.length);
+            res.json(data);
+        });
+
+    }).catch((err) => {
+        res.status(204).send({ err: err });
+        res.end();
+    });
 });
 
 router.route('/auth/getSi').get((req, res) => {
@@ -31,3 +52,14 @@ router.route('/auth/getSi').get((req, res) => {
 
 
 module.exports = router;
+
+/* let add = (a,b,callback)=>{
+    callback(a+b);
+};
+
+add((num)=>{
+    console.log(num);
+});
+
+console.log('0');
+*/

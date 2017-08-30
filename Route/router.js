@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const map = require('../database/Model/mapModel');
 const logic = require('./logic');
+let request = require('request');
 
 
 router.route('/auth/weather').post((req, res) => {
@@ -16,13 +17,11 @@ router.route('/auth/weather').post((req, res) => {
 router.route('/auth/search').get((req, res) => {
     let lati = req.query.lati;
     let longi = req.query.longi;
+    let cate = req.query.category;
 
-
-    logic.search().then((num) => {
-        let data = new map({
-
-        });
-    });
+    logic.map(lati, longi).then((data) => {
+        res.send(JSON.parse(data));
+    })
 });
 
 router.route('/auth/getSi').get((req, res) => {

@@ -23,26 +23,27 @@ exports.map = (lati, longi) => {
 exports.getCategory = (arr, callback) => {
     let array = new Array();
     for (let i = 0; i < arr.length; i++) {
-        request('https://apis.skplanetx.com/tmap/pois/' + arr[i].id + '?callback=&resCoordType=&version=1 &appKey=' + key.sktKey, (err, response, body) => {
-            if (err) {
-                throw err;
-            } else if (body) {
-                let object = JSON.parse(body);
-                addCategory(object, arr, i).then((data) => {
-                    array.push(data);
-                    console.log(array);
-                    return array;
-                }).then((array) => {
-                    if (i == arr.length - 1) {
-                        console.log(array);
-                        callback(array);
-                    }
-                }).catch((err) => {
-                    console.log(err);
-                });
+        (function(i) {
+            console.log(i);
+            request('https://apis.skplanetx.com/tmap/pois/' + arr[i].id + '?callback=&resCoordType=&version=1 &appKey=' + key.sktKey, (err, response, body) => {
+                if (err) {
+                    throw err;
+                } else if (body) {
+                    let object = JSON.parse(body);
+                    addCategory(object, arr, i).then((data) => {
+                        array.push(data);
+                        return array;
+                    }).then((array) => {
+                        if (array.length == arr.length) {
+                            callback(array);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
 
-            }
-        });
+                }
+            });
+        })(i);
     }
 };
 

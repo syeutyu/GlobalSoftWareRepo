@@ -9,7 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.15.4",
-    "forever": "^0.15.3"
+    "forever": "^0.15.3",
+    "mongoose": "^4.11.9",
+    "request": "^2.81.0"
   }
 }

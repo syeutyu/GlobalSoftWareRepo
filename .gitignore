@@ -1,1 +1,4 @@
 node_modules
+package.json
+config.js
+launch.json

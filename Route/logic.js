@@ -2,11 +2,30 @@ let request = require('request');
 let key = require('../config');
 
 exports.search = (lati, longi) => {
-    console.log(key);
+    let object = {};
     return new Promise((resolve, reject) => {
-        request('http://apis.skplanetx.com/weather/current/minutely?version=1&lat=' + lati + '&lon=' + longi + '&city=&county=&village=&stnid=&appKey=' + key.sktKey, (err, res, body) => {
-            resolve(body);
+        request('http://apis.skplanetx.com/weather/current/hourly?version=1&lat=' + lati + '&lon=' + longi + '&city=&county=&village=&stnid=&appKey=' + key.sktKey, (err, res, body) => {
+            if (err) {
+                reject(err);
+            }
+            let data = JSON.parse(body);
+
+            if (data.error) {
+
+                reject(data.error);
+
+            } else if (data.weather) {
+
+                object.update = data.weather.hourly[0].timeRelease;
+                object.region = data.weather.hourly[0].grid.county;
+                object.Tc = data.weather.hourly[0].temperature;
+                object.humidity = data.weather.hourly[0].humidity;
+                object.sky = data.weather.hourly[0].sky;
+
+                resolve(object);
+            }
         });
+
     });
 };
 
@@ -24,7 +43,6 @@ exports.getCategory = (arr, callback) => {
     let array = new Array();
     for (let i = 0; i < arr.length; i++) {
         (function(i) {
-            console.log(i);
             request('https://apis.skplanetx.com/tmap/pois/' + arr[i].id + '?callback=&resCoordType=&version=1 &appKey=' + key.sktKey, (err, response, body) => {
                 if (err) {
                     throw err;

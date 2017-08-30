@@ -3,13 +3,15 @@ const map = require('../database/Model/mapModel');
 const logic = require('./logic');
 let request = require('request');
 
-
-router.route('/auth/weather').post((req, res) => {
-    let lati = req.body.lati;
-    let longi = req.body.longi;
+router.route('/auth/weather').get((req, res) => {
+    let lati = req.query.lati;
+    let longi = req.query.longi;
 
     logic.search(lati, longi).then((data) => {
-        res.send(data);
+        res.status(200).json(data);
+        res.end();
+    }).catch((err) => {
+        res.status(400).send(err);
         res.end();
     });
 });
@@ -33,12 +35,9 @@ router.route('/auth/search').get((req, res) => {
         return arr;
 
     }).then((arr) => {
-        console.log('실행');
         logic.getCategory(arr, (data) => {
-            console.log(data.length);
-            res.json(data);
+            res.status(200).json(data);
         });
-
     }).catch((err) => {
         res.status(204).send({ err: err });
         res.end();
@@ -50,16 +49,4 @@ router.route('/auth/getSi').get((req, res) => {
 
 });
 
-
 module.exports = router;
-
-/* let add = (a,b,callback)=>{
-    callback(a+b);
-};
-
-add((num)=>{
-    console.log(num);
-});
-
-console.log('0');
-*/

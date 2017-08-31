@@ -1,5 +1,5 @@
 let request = require('request');
-let key = require('../config');
+let key = require('../../config');
 
 exports.search = (lati, longi) => {
     let object = {};
@@ -15,14 +15,17 @@ exports.search = (lati, longi) => {
                 reject(data.error);
 
             } else if (data.weather) {
-
+                let num = data.weather.hourly[0].sky.code.substring(6, 7);
+                let code = getSky(num);
                 object.update = data.weather.hourly[0].timeRelease;
                 object.region = data.weather.hourly[0].grid.county;
                 object.tc = parseInt(data.weather.hourly[0].temperature.tc);
                 object.tmax = parseInt(data.weather.hourly[0].temperature.tmax);
                 object.tmin = parseInt(data.weather.hourly[0].temperature.tmin);
                 object.humidity = parseInt(data.weather.hourly[0].humidity);
-                object.sky = data.weather.hourly[0].sky;
+                object.skycode = code;
+                object.skyname = data.weather.hourly[0].sky.name;
+                console.log(object.skycode);
 
                 resolve(object);
             }
@@ -74,3 +77,16 @@ let addCategory = (obj, arr, i) => {
     });
 
 };
+
+function getSky(num) {
+    if (num == 1)
+        return 0;
+    else if (num == 2 || 3 || 7)
+        return 1;
+    else if (num == 4 || 6 || 8 || 10)
+        return 2;
+    else if (num == 5 || 9)
+        return 3;
+    else if (num == 11 || 12 || 13 || 14)
+        return 4;
+}

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const map = require('../database/Model/mapModel');
+const map = require('../../database/Model/mapModel');
 const logic = require('./logic');
 let request = require('request');
 

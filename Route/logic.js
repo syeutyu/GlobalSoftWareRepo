@@ -18,8 +18,10 @@ exports.search = (lati, longi) => {
 
                 object.update = data.weather.hourly[0].timeRelease;
                 object.region = data.weather.hourly[0].grid.county;
-                object.Tc = data.weather.hourly[0].temperature;
-                object.humidity = data.weather.hourly[0].humidity;
+                object.tc = parseInt(data.weather.hourly[0].temperature.tc);
+                object.tmax = parseInt(data.weather.hourly[0].temperature.tmax);
+                object.tmin = parseInt(data.weather.hourly[0].temperature.tmin);
+                object.humidity = parseInt(data.weather.hourly[0].humidity);
                 object.sky = data.weather.hourly[0].sky;
 
                 resolve(object);

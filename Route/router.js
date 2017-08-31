@@ -6,7 +6,7 @@ let request = require('request');
 router.route('/auth/weather').get((req, res) => {
     let lati = req.query.lati;
     let longi = req.query.longi;
-
+    console.log(lati + ',' + longi);
     logic.search(lati, longi).then((data) => {
         res.status(200).json(data);
         res.end();

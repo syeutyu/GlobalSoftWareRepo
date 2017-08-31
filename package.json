@@ -12,8 +12,10 @@
     "body-parser": "^1.17.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.15.4",
+    "express-session": "^1.15.5",
     "forever": "^0.15.3",
     "mongoose": "^4.11.9",
+    "node-fcm": "^1.0.3",
     "request": "^2.81.0"
   }
 }

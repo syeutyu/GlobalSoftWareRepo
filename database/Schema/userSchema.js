@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const personSchema = Schema({
     token: { type: String, unique: true },
-    module: { type: Array }
+    module: { type: JSON }
 });
 
 module.exports = personSchema;

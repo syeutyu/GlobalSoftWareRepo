@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const map = require('../../database/Model/mapModel');
 const logic = require('./logic');
-let request = require('request');
+const request = require('request');
+const novel = require('../../database/Model/novelModel');
 
 router.route('/auth/weather').get((req, res) => {
     let lati = req.query.lati;
@@ -22,32 +23,38 @@ router.route('/auth/search').get((req, res) => {
     let longi = req.query.longi;
     let cate = req.query.category;
 
-    logic.map(lati, longi).then((data) => {
-        let arr = new Array();
-        for (let i = 0; i < data.length; i++) {
-            let object = {};
-            object.id = data[i].id
-            object.lati = data[i].frontLat;
-            object.longi = data[i].frontLon;
-            object.name = data[i].name;
-            object.tel = data[i].telNo;
-            arr.push(object);
-        }
-        return arr;
-
-    }).then((arr) => {
-        logic.getCategory(arr, (data) => {
-            res.status(200).json(data);
-        });
+    Promise.all([logic.map(lati, longi), getNovel()]).then((data) => {
+        console.log(data);
+        res.status(200).json(data);
+        res.end();
     }).catch((err) => {
-        res.status(204).send({ err: err });
+        console.log(err);
+        res.status(500).json(err);
         res.end();
     });
-});
-
-router.route('/auth/getSi').get((req, res) => {
-    let url = req.query.url;
 
 });
 
+function getNovel() {
+    return new Promise((resolve, reject) => {
+
+        novel.findNovel().then((find) => {
+            let nArr = selectNovel(find);
+            resolve(nArr);
+        }).catch((err) => {
+            console.log(err);
+            reject(err);
+        });
+
+    });
+}
+
+function selectNovel(find) {
+    let nArr = new Array();
+    for (let i = 0; i < 5; i++) {
+        let random = Math.floor((Math.random() * 20) + 1);
+        nArr.push(find[0]);
+    }
+    return nArr;
+}
 module.exports = router;

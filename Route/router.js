@@ -8,6 +8,7 @@ router.route('/auth/weather').get((req, res) => {
     let longi = req.query.longi;
     console.log(lati + ',' + longi);
     logic.search(lati, longi).then((data) => {
+        console.log(data);
         res.status(200).json(data);
         res.end();
     }).catch((err) => {

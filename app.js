@@ -4,6 +4,7 @@ const db = require('./database/conn');
 const config = require('./config');
 const tRouter = require('./Route/router');
 const uRouter = require('./Route/user/router');
+const mRouter = require('./Route/module/router');
 const session = require('express-session');
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(session({
 }));
 app.use('/', tRouter);
 app.use('/', uRouter);
+app.use('/', mRouter);
 
 app.listen(8027, () => {
     console.log('Port On 8027 ');

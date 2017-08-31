@@ -1,9 +1,4 @@
 const userModel = require('../../database/Model/userModel');
-const FCM = require('node-fcm');
-
-exports.sendFcm = (token, ServerKey, title, body) => {
-
-};
 
 exports.saveToken = (user) => {
     return new Promise((resolve, reject) => {

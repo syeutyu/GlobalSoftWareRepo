@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const logic = require('./logic');
 const userModel = require('../../database/Model/userModel');
+const fcm = require('../fcmSend');
 
-router.route('/android/open').get((req, res) => {
+router.route('/auth/open').get((req, res) => {
     let token = req.query.token;
 
     let user = new userModel({ "token": token });

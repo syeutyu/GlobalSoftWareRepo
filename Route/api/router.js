@@ -23,6 +23,7 @@ router.route('/auth/search').get((req, res) => {
     let longi = req.query.longi;
 
     Promise.all([logic.map(lati, longi), getNovel()]).then((data) => {
+        console.log('data');
         console.log(data[1]);
         res.status(200).json(data);
         res.end();
@@ -39,6 +40,7 @@ function getNovel() {
 
         novel.findNovel().then((find) => {
             let nArr = selectNovel(find);
+            console.log(nArr);
             resolve({ writer: nArr });
         }).catch((err) => {
             console.log(err);

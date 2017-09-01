@@ -51,11 +51,26 @@ function getNovel() {
 }
 
 function selectNovel(find) {
-    let nArr = new Array();
-    for (let i = 0; i < 5; i++) {
-        let random = Math.floor((Math.random() * 11) + 1);
-        nArr.push(find[random]);
+    let ar = new Array();
+    let Arr = new Array();
+    let temp;
+    let rnum;
+
+    //전달받은 매개변수 n만큼 배열 생성 ( 1~n )
+    for (let i = 1; i <= 12; i++) {
+        ar.push(i);
     }
-    return nArr;
+
+    //값을 서로 섞기
+    for (let i = 0; i < ar.length; i++) {
+        rnum = Math.floor(Math.random() * 12); //난수발생
+        temp = ar[i];
+        ar[i] = ar[rnum];
+        ar[rnum] = temp;
+    }
+    for (let i = 0; i < 5; i++) {
+        Arr.push(find[ar[i]]);
+    }
+    return Arr;
 }
 module.exports = router;

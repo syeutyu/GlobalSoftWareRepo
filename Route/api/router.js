@@ -24,7 +24,7 @@ router.route('/auth/search').get((req, res) => {
     let cate = req.query.category;
 
     Promise.all([logic.map(lati, longi), getNovel()]).then((data) => {
-        console.log(data);
+        console.log(data[1]);
         res.status(200).json(data);
         res.end();
     }).catch((err) => {

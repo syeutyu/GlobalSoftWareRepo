@@ -11,6 +11,9 @@ exports.sendFcm = (clienKey, type) => {
                 notification: {
                     title: '비도오고 그래서',
                     body: '창문 닫았어요'
+                },
+                data: {
+                    my_key: 'water'
                 }
             };
 
@@ -30,6 +33,9 @@ exports.sendFcm = (clienKey, type) => {
                 notification: {
                     title: '비도오고 그래서',
                     body: '오늘의 날씨에요'
+                },
+                data: {
+                    my_key: 'door'
                 }
             };
 

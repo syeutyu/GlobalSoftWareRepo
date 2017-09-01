@@ -7,12 +7,14 @@ exports.findByuser = (module_num, type, res) => {
 
         if (err) {
             console.log(err);
+            res.status(400).end();
         } else if (0 < find.length) {
             fcm.sendFcm(find[0].token, type).then((response) => {
                 console.log(response);
                 res.end();
             }).catch((err) => {
                 console.log(err);
+                res.status(204);
                 res.end();
             });
         } else {

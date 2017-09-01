@@ -21,7 +21,6 @@ router.route('/auth/weather').get((req, res) => {
 router.route('/auth/search').get((req, res) => {
     let lati = req.query.lati;
     let longi = req.query.longi;
-    let cate = req.query.category;
 
     Promise.all([logic.map(lati, longi), getNovel()]).then((data) => {
         console.log(data[1]);
@@ -40,7 +39,7 @@ function getNovel() {
 
         novel.findNovel().then((find) => {
             let nArr = selectNovel(find);
-            resolve(nArr);
+            resolve({ writer: nArr });
         }).catch((err) => {
             console.log(err);
             reject(err);
@@ -52,8 +51,8 @@ function getNovel() {
 function selectNovel(find) {
     let nArr = new Array();
     for (let i = 0; i < 5; i++) {
-        let random = Math.floor((Math.random() * 20) + 1);
-        nArr.push(find[0]);
+        let random = Math.floor((Math.random() * 11) + 1);
+        nArr.push(find[random]);
     }
     return nArr;
 }

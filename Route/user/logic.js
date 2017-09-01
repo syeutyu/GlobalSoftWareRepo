@@ -14,7 +14,7 @@ exports.findModule = (token, callback) => {
         if (err) {
             callback(err, null);
         } else if (find) {
-            callback(null, find[0].module);
+            callback(null, find);
         }
     });
 };

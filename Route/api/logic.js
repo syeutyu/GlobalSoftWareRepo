@@ -1,13 +1,12 @@
 let request = require('request');
 let key = require('../../config');
-
 exports.search = (lati, longi) => {
     console.log('날씨' + lati + ',' + longi);
     let object = {};
     return new Promise((resolve, reject) => {
         request('http://apis.skplanetx.com/weather/current/hourly?version=1&lat=' + lati + '&lon=' + longi + '&city=&county=&village=&stnid=&appKey=' + key.sktKey, (err, res, body) => {
             if (err) {
-                reject(err);
+                console.log(err);
             }
             let data = JSON.parse(body);
 
@@ -16,19 +15,23 @@ exports.search = (lati, longi) => {
                 reject(data.error);
 
             } else if (data.weather) {
-                let num = data.weather.hourly[0].sky.code.substring(6, 7);
-                let code = getSky(num);
-                object.update = data.weather.hourly[0].timeRelease;
-                object.region = data.weather.hourly[0].grid.county;
-                object.tc = parseInt(data.weather.hourly[0].temperature.tc);
-                object.tmax = parseInt(data.weather.hourly[0].temperature.tmax);
-                object.tmin = parseInt(data.weather.hourly[0].temperature.tmin);
-                object.humidity = parseInt(data.weather.hourly[0].humidity);
-                object.skycode = code;
-                object.skyname = data.weather.hourly[0].sky.name;
-                console.log(object.skycode);
+                getRain(lati, longi).then((rain) => {
+                    let num = data.weather.hourly[0].sky.code.substring(6, 7);
+                    let code = getSky(num);
+                    object.update = data.weather.hourly[0].timeRelease;
+                    object.region = data.weather.hourly[0].grid.county;
+                    object.tc = parseInt(data.weather.hourly[0].temperature.tc);
+                    object.tmax = parseInt(data.weather.hourly[0].temperature.tmax);
+                    object.tmin = parseInt(data.weather.hourly[0].temperature.tmin);
+                    object.humidity = parseInt(data.weather.hourly[0].humidity);
+                    object.rain = parseInt(rain);
+                    object.skycode = code;
+                    object.skyname = data.weather.hourly[0].sky.name;
+                    console.log(object.skycode);
 
-                resolve(object);
+                    resolve(object);
+                });
+
             }
         });
 
@@ -56,7 +59,7 @@ exports.map = (lati, longi) => {
                 if (arr.length == 5)
                     break;
             }
-            resolve(arr);
+            resolve({ food: arr });
         });
     });
 
@@ -107,4 +110,38 @@ function getSky(num) {
         return 3;
     else if (num == 11 || 12 || 13 || 14)
         return 4;
+}
+
+function getRain(lati, longi) {
+    return new Promise((resolve, reject) => {
+        request('http://apis.skplanetx.com/weather/forecast/3days?version=1&lat=' + lati + '&lon=' + longi + '&appKey=' + key.sktKey, (err, res, body) => {
+            if (err) {
+                console.log(err);
+            } else if (body) {
+                let result = new Array();
+                let obj = JSON.parse(body);
+                let count = new Array();
+                let max = 0;
+                if (obj.weather.forecast3days[0].fcst3hour.precipitation) {
+                    let data = obj.weather.forecast3days[0].fcst3hour.precipitation;
+
+                    for (let i in data)
+                        result.push([i, data[i]]);
+
+                    for (let i = 0; i < result.length; i++) {
+                        if (i % 2 == 1) {
+                            count.push(i);
+                        }
+                    }
+                    for (let i = 0; i < count.length; i++) {
+                        if (max < result[i][1]) {
+                            max = result[i][1];
+                        }
+                    }
+
+                    resolve(max);
+                }
+            }
+        });
+    });
 }

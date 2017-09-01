@@ -10,7 +10,7 @@ exports.sendFcm = (clienKey, type) => {
                 to: clienKey,
                 notification: {
                     title: '비도오고 그래서',
-                    body: '비도오고 그래서...'
+                    body: '창문 닫았어요'
                 }
             };
 
